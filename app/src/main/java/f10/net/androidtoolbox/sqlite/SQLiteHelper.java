@@ -63,7 +63,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         return result;
     }
 
-    public <U extends SQLiteEntity> void insert(SQLiteTable<U> table, U item) {
+    public <U extends SQLiteEntity> void createEntity(SQLiteTable<U> table, U item) {
         long rowID = this.getWritableDatabase().insert(table.name, null, table.serialize(item));
         item.set_zkey(rowID);
     }
@@ -75,4 +75,9 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         this.getWritableDatabase().update(tableName, values, where, null);
     }
 
+    public <U extends SQLiteEntity> void deleteEnetity(SQLiteTable<U> table, U item) {
+        String tableName = table.name;
+        String where = SQLiteQuery.Predicate.equal(SQLiteTable.PRIMARY_KEY_FIELD, item.get_zkey()).toString();
+        this.getWritableDatabase().delete(tableName, where, null);
+    }
 }
