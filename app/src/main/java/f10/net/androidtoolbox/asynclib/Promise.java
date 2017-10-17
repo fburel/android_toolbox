@@ -111,6 +111,27 @@ public class Promise<T> {
         });
     }
 
+    public <U> void link(final Promise<U> follower, final Mapper<T, U> mapper)
+    {
+        this.addErrorHandler(new Handler<Exception>() {
+            @Override
+            public void onFinished(Exception result) {
+                follower.fails(result);
+            }
+        });
+
+        this.addSuccesHandler(new Handler<T>() {
+            @Override
+            public void onFinished(T result) {
+                try {
+                    follower.succeeds(mapper.map(result));
+                } catch (Exception e) {
+                    follower.fails(e);
+                }
+            }
+        });
+    }
+
     public static Promise<Void> whenAll(Promise[] promises)
     {
         return whenAll(promises, false);
