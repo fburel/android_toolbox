@@ -122,6 +122,22 @@ public class PromiseAsyncTask<T> {
 
     }
 
+    public static <U, T> Promise<T> chain(final Promise<U> first, final ChainedTask<U, T> followActionIfSuccess)
+    {
+        return chain(first, new Task<T>() {
+            @Override
+            public void perform(final Promise<T> promise) {
+                first.addSuccesHandler(new Handler<U>() {
+                    @Override
+                    public void onFinished(U result) {
+                        followActionIfSuccess.perform(result, promise);
+                    }
+                });
+            }
+        });
+
+    }
+
     public static <T> Promise<T> afterDelay(Task<T> t, final int milliseconds)
     {
         Promise<Boolean> delay = Promise.fromResultAfterDelay(Boolean.FALSE, milliseconds);
