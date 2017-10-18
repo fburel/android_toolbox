@@ -1,4 +1,4 @@
-package f10.net.androidtoolbox;
+package f10.net.androidtoolbox.eventDriven;
 
 import java.lang.ref.WeakReference;
 import java.util.Collections;
