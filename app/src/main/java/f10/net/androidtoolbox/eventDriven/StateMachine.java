@@ -6,36 +6,33 @@ import java.util.Observable;
  * Created by fl0 on 18/10/2017.
  */
 
-public abstract class StateMachine {
+public class StateMachine {
+
+    public interface StateMachineControl
+    {
+        boolean transitionIsAllowed(State from, State to);
+        void onTransition(State from, State to);
+    }
 
     public enum State {}
 
-    public class StateObservable extends ObservableObject {
-        private State state;
+    private StateMachineControl _control;
+    public ObservableValue<State> stateObservable;
 
-        public State getState() {
-            return state;
-        }
-
-        public void setState(State state) {
-            notifyDataChanged();
-            this.state = state;
-        }
+    public StateMachine(StateMachineControl _control) {
+        this._control = _control;
     }
 
-    public StateObservable stateObservable;
 
     protected void moveToState(State toState)
     {
-        if (transitionIsAllowed(stateObservable.getState(), toState))
+        if (_control.transitionIsAllowed(stateObservable.getValue(), toState))
         {
-            onTransition(stateObservable.getState(), toState);
-            stateObservable.setState(toState);
+            _control.onTransition(stateObservable.getValue(), toState);
+            stateObservable.setValue(toState);
         }
     }
 
-    protected abstract boolean transitionIsAllowed(State from, State to);
-    protected abstract void onTransition(State from, State to);
 
 
 }
