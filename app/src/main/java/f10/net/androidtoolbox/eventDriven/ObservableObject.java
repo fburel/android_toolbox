@@ -2,6 +2,7 @@ package f10.net.androidtoolbox.eventDriven;
 
 import java.lang.ref.WeakReference;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,21 +13,25 @@ import java.util.Set;
 public abstract class ObservableObject {
 
     public interface Observer {
-        void onObservableObjectChanged(ObservableObject observable);
+        void onObservableObjectChanged(ObservableObject observable, Object context);
     }
 
     private final Set<WeakReference<Observer>> obs = new HashSet<WeakReference<Observer>>();
+    private final HashMap<WeakReference<Observer>, Object> ctx = new HashMap<WeakReference<Observer>, Object>();
 
     public Set<WeakReference<Observer>> getObservers(){
         return Collections.unmodifiableSet(obs);
     }
 
-    public void addObserver(Observer subscriber) {
-        obs.add(new WeakReference<Observer>(subscriber));
+    public void addObserver(Observer subscriber, Object context) {
+        WeakReference<Observer> v = new WeakReference<Observer>(subscriber);
+        obs.add(v);
+        if(context != null) ctx.put(v, context);
     }
 
     public void removeAllObservers() {
         obs.clear();
+        ctx.clear();
     }
 
     public void notifyDataChanged()
@@ -34,7 +39,8 @@ public abstract class ObservableObject {
         for(WeakReference<Observer> s : obs)
         {
             try {
-                s.get().onObservableObjectChanged(this);
+                Object c = ctx.containsKey(s) ? ctx.get(s) : null;
+                s.get().onObservableObjectChanged(this, c);
             }
             catch (Exception ignored) {
 
