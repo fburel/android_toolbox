@@ -1,5 +1,7 @@
 package f10.net.androidtoolbox.asynclib;
 
+import android.test.mock.MockApplication;
+
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -130,6 +132,13 @@ public class Promise<T> {
                 }
             }
         });
+    }
+
+    public <U> Promise<U> map(Mapper<T, U> mapper)
+    {
+        Promise<U> result = new Promise<>();
+        this.link(result, mapper);
+        return result;
     }
 
     public static Promise<Void> whenAll(Promise[] promises)
