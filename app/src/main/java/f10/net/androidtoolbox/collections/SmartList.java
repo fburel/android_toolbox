@@ -1,6 +1,10 @@
 package f10.net.androidtoolbox.collections;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import f10.net.androidtoolbox.interfaces.Predicate;
@@ -14,6 +18,23 @@ import f10.net.androidtoolbox.interfaces.SortDescripor;
  */
 
 public class SmartList<T> extends ArrayList<T> {
+
+    public SmartList(int initialCapacity) {
+        super(initialCapacity);
+    }
+
+    public SmartList() {
+        super();
+    }
+
+    public SmartList(Collection<? extends T> c) {
+        super(c);
+    }
+
+    public SmartList(T[] collection)
+    {
+        super(Arrays.asList(collection));
+    }
 
     public <U> SmartList<U> map(Mapper<T, U> mapper)
     {
@@ -118,5 +139,28 @@ public class SmartList<T> extends ArrayList<T> {
         T obj2 = this.get(position2);
         this.add(position1, obj2);
         this.add(position2, obj1);
+    }
+
+    public <K> Map<K, SmartList<T>> group(final Mapper<T, K> groupby)
+    {
+        final Map<K, SmartList<T>> map = new HashMap<>();
+        this.forEach(new Executor<T>() {
+            @Override
+            public void executeWith(T object) {
+                try {
+                    K keyforObject = groupby.map(object);
+                    if(!map.containsKey(keyforObject))
+                    {
+                        map.put(keyforObject, new SmartList<T>());
+                    }
+                    SmartList<T> list = map.get(keyforObject);
+                    list.add(object);
+                } catch (Exception ignored) {
+                    // do nothing
+                }
+            }
+        });
+        return map;
+
     }
 }
