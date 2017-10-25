@@ -6,6 +6,13 @@ package f10.net.androidtoolbox.eventDriven;
 
 public class ObservableValue<T> extends ObservableObject {
 
+    public ObservableValue() {
+    }
+
+    public ObservableValue(T value) {
+        this.value = value;
+    }
+
     private T value = null;
 
     public T getValue() {

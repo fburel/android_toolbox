@@ -36,6 +36,11 @@ public class SmartList<T> extends ArrayList<T> {
         super(Arrays.asList(collection));
     }
 
+    public SmartList(T item) {
+        super();
+        add(item);
+    }
+
     public <U> SmartList<U> map(Mapper<T, U> mapper)
     {
         SmartList<U> dest = new SmartList<>();

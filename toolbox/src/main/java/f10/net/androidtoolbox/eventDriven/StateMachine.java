@@ -10,21 +10,22 @@ public class StateMachine {
 
     public interface StateMachineControl
     {
-        boolean transitionIsAllowed(State from, State to);
-        void onTransition(State from, State to);
+        boolean transitionIsAllowed(int from, int to);
+        void onTransition(int from, int to);
     }
 
-    public enum State {}
 
     private StateMachineControl _control;
-    public ObservableValue<State> stateObservable;
+    public ObservableValue<Integer> stateObservable;
 
-    public StateMachine(StateMachineControl _control) {
+
+    public StateMachine(StateMachineControl _control, int intialState) {
         this._control = _control;
+        this.stateObservable = new ObservableValue<Integer>(intialState);
     }
 
 
-    protected void moveToState(State toState)
+    public void moveToState(int toState)
     {
         if (_control.transitionIsAllowed(stateObservable.getValue(), toState))
         {
@@ -32,7 +33,4 @@ public class StateMachine {
             stateObservable.setValue(toState);
         }
     }
-
-
-
 }
