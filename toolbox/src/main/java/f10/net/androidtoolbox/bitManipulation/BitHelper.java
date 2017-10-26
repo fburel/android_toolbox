@@ -11,6 +11,7 @@ public class BitHelper {
     private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
 
     public static String bytesToHex(byte[] bytes) {
+
         char[] hexChars = new char[bytes.length * 2];
         for ( int j = 0; j < bytes.length; j++ ) {
             int v = bytes[j] & 0xFF;
@@ -22,18 +23,23 @@ public class BitHelper {
 
     public static byte[] toBytes(long l) {
         byte[] result = new byte[8];
-        for (int i = 7; i >= 0; i--) {
+        for (int i = 0; i < 8; i++) {
             result[i] = (byte)(l & 0xFF);
             l >>= 8;
         }
         return result;
     }
 
-    public static long toLong(byte[] b) {
+    public static long toLong(byte[] bytes) {
+
+        byte[] container = new byte[8];
+
+        System.arraycopy(bytes, 0, container, 8 - Math.min(8, bytes.length), Math.min(8, bytes.length));
+
         long result = 0;
         for (int i = 0; i < 8; i++) {
             result <<= 8;
-            result |= (b[i] & 0xFF);
+            result |= (container[i] & 0xFF);
         }
         return result;
     }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -57,6 +58,22 @@ public class SmartList<T> extends ArrayList<T> {
         return dest;
     }
 
+    public <U> SmartList<U> mapWithFlattening(Mapper<T, Collection<U>> mapper)
+    {
+        SmartList<U> dest = new SmartList<>();
+
+        for(T item : this)
+        {
+            try {
+                dest.addAll(mapper.map(item));
+            } catch (Exception ignored) {
+                // do nothing
+            }
+        }
+
+        return dest;
+    }
+
     public void forEach(Executor<T> executor)
     {
         for(T item : this)
@@ -65,16 +82,17 @@ public class SmartList<T> extends ArrayList<T> {
         }
     }
 
-    public void filter(Predicate<T> filter)
+    public SmartList<T> filter(Predicate<T> filter)
     {
-        SmartList<T> toRemove = new SmartList<>();
+        SmartList<T> result = new SmartList<>();
+
         for(T item : this)
         {
-            if(!filter.accept(item)){
-                toRemove.add(item);
+            if(filter.accept(item)){
+                result.add(item);
             }
         }
-        this.removeAll(toRemove);
+        return result;
     }
 
     public T first()
@@ -109,6 +127,7 @@ public class SmartList<T> extends ArrayList<T> {
 
     public void sort(final SortDescripor<T> descriptor)
     {
+
         if(this.size() <= 1) return;
 
         final SmartList<T> before = new SmartList<>();
