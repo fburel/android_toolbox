@@ -3,6 +3,7 @@ package f10.net.androidtoolbox.forms;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 
 import java.io.Serializable;
@@ -63,7 +64,7 @@ public abstract class Cell<T> {
         }
         else if(getConfigAsInt(CELL_BACKGROUND_DRAWABLE, 0) != 0)
         {
-            Drawable backgroung = cell.getContext().getDrawable(getConfigAsInt(CELL_BACKGROUND_DRAWABLE, 0));
+            Drawable backgroung = ContextCompat.getDrawable(cell.getContext(), getConfigAsInt(CELL_BACKGROUND_DRAWABLE, 0));
             cell.setBackground(backgroung);
         }
 
