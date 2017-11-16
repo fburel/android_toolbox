@@ -14,9 +14,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import f10.net.androidtoolbox.R;
+
 
 /**
  * Created by fl0 on 05/05/2017.
@@ -29,7 +29,6 @@ public abstract class DrawerActivity extends AppCompatActivity implements Naviga
 
     private ActionBarDrawerToggle _drawerToggle;
     private DrawerLayout _drawer;
-    private FrameLayout _frameLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,13 +37,10 @@ public abstract class DrawerActivity extends AppCompatActivity implements Naviga
 
 
         // Create the UI
-
-        _frameLayout = new FrameLayout(this);
-        _frameLayout.setId(R.id.drawerActivityFragmentLayout);
-        _frameLayout.setTag("fragmentPlaceholder");
+        View v = onCreateMainView(savedInstanceState);
 
         _drawer = new DrawerLayout(this);
-        _drawer.addView(_frameLayout, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        _drawer.addView(v, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
         addContentView(_drawer, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
@@ -78,6 +74,8 @@ public abstract class DrawerActivity extends AppCompatActivity implements Naviga
             getSupportActionBar().setHomeButtonEnabled(true);
         }
     }
+
+    protected abstract View onCreateMainView(Bundle savedInstanceState);
 
     protected View getNavigationHeaderView(LayoutInflater inflater) {
         return inflater.inflate(R.layout.side_menu_demo_header, null);

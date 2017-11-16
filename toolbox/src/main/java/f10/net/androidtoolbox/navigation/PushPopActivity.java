@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.View;
+import android.widget.FrameLayout;
 
 import java.util.ArrayList;
 
@@ -21,6 +23,16 @@ import f10.net.androidtoolbox.R;
 public abstract class PushPopActivity extends DrawerActivity {
 
     private final ArrayList<Fragment> _fragments = new ArrayList<Fragment>();
+
+    @Override
+    protected View onCreateMainView(Bundle savedInstanceState) {
+
+        FrameLayout frameLayout = new FrameLayout(this);
+        frameLayout.setId(R.id.drawerActivityFragmentLayout);
+        frameLayout.setTag("fragmentPlaceholder");
+
+        return frameLayout;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
