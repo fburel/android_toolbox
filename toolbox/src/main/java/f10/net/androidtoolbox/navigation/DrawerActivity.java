@@ -75,7 +75,6 @@ public abstract class DrawerActivity extends AppCompatActivity implements Naviga
         }
     }
 
-    protected abstract View onCreateMainView(Bundle savedInstanceState);
 
     protected View getNavigationHeaderView(LayoutInflater inflater) {
         return inflater.inflate(R.layout.side_menu_demo_header, null);
@@ -132,6 +131,8 @@ public abstract class DrawerActivity extends AppCompatActivity implements Naviga
     }
 
     // Must override
+
+    protected abstract View onCreateMainView(Bundle savedInstanceState);
 
     protected abstract boolean prepareSideMenu(Menu menu);
 
