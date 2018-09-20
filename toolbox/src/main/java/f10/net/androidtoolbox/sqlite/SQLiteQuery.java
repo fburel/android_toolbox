@@ -162,5 +162,9 @@ public class SQLiteQuery<T extends SQLiteEntity> {
         public static Predicate or(Predicate p1, Predicate p2){
             return new Predicate(String.format("(%s OR %s)", p1.toString(), p2.toString()));
         }
+
+        public static Predicate not(Predicate p1){
+            return new Predicate(String.format("NOT %s", p1.toString()));
+        }
     }
 }
