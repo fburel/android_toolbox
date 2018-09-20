@@ -23,14 +23,14 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:27.1.1'
-    compile 'com.android.support:design:27.1.1'
-    compile project(':toolbox')
-    compile 'org.greenrobot:eventbus:3.0.0'
-    compile 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.0'
-    compile 'com.google.android.gms:play-services-maps:15.0.1'
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:design:27.1.1'
+    implementation project(':toolbox')
+    implementation 'org.greenrobot:eventbus:3.0.0'
+    implementation 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.0'
+    implementation 'com.google.android.gms:play-services-maps:15.0.1'
 }
