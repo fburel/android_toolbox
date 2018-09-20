@@ -19,6 +19,7 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import f10.net.androidtoolbox.ServiceLocator;
@@ -74,6 +75,7 @@ public class CityDetailFragments extends FormFragment {
         private GoogleMap googleMap;
         private LatLng value;
         private Dialog dialog;
+        private Marker marker;
 
         public CoordinatePickerCell(int tag, FormFragment form, String label, LatLng coord) {
             super(tag, form, label, coord);
@@ -96,7 +98,7 @@ public class CityDetailFragments extends FormFragment {
                     lis.googleMap = googleMap;
                     MapsInitializer.initialize(context);
                     int zoom = 7;
-                    googleMap.addMarker(new MarkerOptions().position(coord));
+                    lis.marker = googleMap.addMarker(new MarkerOptions().position(coord));
                     googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coord, zoom));
                     googleMap.setOnCameraMoveListener(lis);
                 }
@@ -117,7 +119,10 @@ public class CityDetailFragments extends FormFragment {
 
         @Override
         public void onCameraMove() {
-            if(this.googleMap != null) this.value = googleMap.getCameraPosition().target;
+            if(this.googleMap != null) {
+                this.value = googleMap.getCameraPosition().target;
+                marker.setPosition(this.value);
+            }
         }
 
 
