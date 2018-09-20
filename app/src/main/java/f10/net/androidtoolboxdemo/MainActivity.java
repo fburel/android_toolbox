@@ -3,6 +3,7 @@ package f10.net.androidtoolboxdemo;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,15 +24,15 @@ import f10.net.androidtoolboxdemo.fragments.CityDetailFragments;
 public class MainActivity extends PushPopActivity {
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
     }
 
     @Override
-    protected void onStop() {
+    protected void onDestroy() {
         EventBus.getDefault().unregister(this);
-        super.onStop();
+        super.onDestroy();
     }
 
     @Override
@@ -64,6 +65,17 @@ public class MainActivity extends PushPopActivity {
             // When a city is selected, present the detail of said city (push animation)
             case CitySelected:
                 push(new CityDetailFragments(), event.getBundle());
+                break;
+            // When a city is selected, present the detail of said city (push animation)
+            case AddCity:
+                presentModally(CityDetailFragments.class);
+                // To present modally, add <activity android:name="f10.net.androidtoolbox.navigation.ModalActivity"> in your manifest
+                break;
+            case CityAdded:
+                dismissModalActivity();
+                break;
+            case CityRemoved:
+                pop();
                 break;
         }
     };

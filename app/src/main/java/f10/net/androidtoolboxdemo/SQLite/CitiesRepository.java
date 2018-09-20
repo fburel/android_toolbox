@@ -65,4 +65,9 @@ public class CitiesRepository implements ICityRepository {
         this.helper.updateEntity(this.tableCity, city);
     }
 
+    @Override
+    public void Delete(City city) {
+        this.helper.deleteEnetity(this.tableCity, city);
+    }
+
 }

@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 public enum SegueEvents {
 
-    CitySelected;
+    CitySelected, AddCity, CityAdded, CityRemoved;
 
     private Bundle bundle = new Bundle();
 

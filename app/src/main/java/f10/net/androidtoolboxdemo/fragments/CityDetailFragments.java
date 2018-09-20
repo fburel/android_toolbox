@@ -22,14 +22,21 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.Dictionary;
+
 import f10.net.androidtoolbox.ServiceLocator;
 import f10.net.androidtoolbox.forms.Cell;
 import f10.net.androidtoolbox.forms.FormFragment;
 import f10.net.androidtoolbox.forms.PickerDialogCell;
 import f10.net.androidtoolbox.forms.TextViewCell;
+import f10.net.androidtoolbox.navigation.ModalActivity;
+import f10.net.androidtoolbox.navigation.PushPopActivity;
 import f10.net.androidtoolboxdemo.IServices.ICityRepository;
 import f10.net.androidtoolboxdemo.R;
 import f10.net.androidtoolboxdemo.SQLite.City;
+import f10.net.androidtoolboxdemo.Segue.SegueEvents;
 
 public class CityDetailFragments extends FormFragment {
 
@@ -38,12 +45,22 @@ public class CityDetailFragments extends FormFragment {
     private  final static int NameField = 1;
     private  final static int CoordField = 2;
 
+    private boolean creationMode = false;
+    private String cityName = "";
 
     @Override
     public void configureForm() {
         Bundle bundle = this.getArguments();
-        if (bundle != null) {
+
+        if (bundle != null && bundle.getSerializable("CitySelected") != null) {
             this.city = (City) bundle.getSerializable("CitySelected");
+            setRightButtonItem("Delete", android.R.drawable.ic_menu_delete);
+        }
+        else  // new city
+        {
+            setRightButtonItem("Save", android.R.drawable.ic_menu_save);
+            this.city = new City("", 0, 0);
+            creationMode = true;
         }
 
         addRow(new TextViewCell(NameField, this , "Name", this.city.getName()));
@@ -55,9 +72,28 @@ public class CityDetailFragments extends FormFragment {
     }
 
     @Override
+    protected void onRightButtonItemClicked() {
+        if(creationMode)
+        {
+            ServiceLocator.get(ICityRepository.class).AddCity(cityName, this.city.getLatitude(), this.city.getLongitude());
+            EventBus.getDefault().post(SegueEvents.CityAdded);
+
+        }
+        else
+        {
+            ServiceLocator.get(ICityRepository.class).Delete(this.city);
+            EventBus.getDefault().post(SegueEvents.CityRemoved);
+
+        }
+    }
+
+    @Override
     public void onCellDataChanged(Cell cell, Object newValue) {
         switch (cell.getTag())
         {
+            case NameField:
+                cityName = (String) newValue;
+                break;
             case CoordField:
                 LatLng latLng = (LatLng) newValue;
                 city.setLongitude(latLng.longitude);
@@ -66,7 +102,10 @@ public class CityDetailFragments extends FormFragment {
         }
 
         // Maybe save here into persistent store
-        ServiceLocator.get(ICityRepository.class).Update(city);
+        if(!creationMode)
+        {
+            ServiceLocator.get(ICityRepository.class).Update(city);
+        }
     }
 
 

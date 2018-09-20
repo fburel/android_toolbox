@@ -12,4 +12,6 @@ public interface ICityRepository extends ServiceLocator.IService
     void AddCity(String name, double longitude, double latitude);
 
     void Update(City city);
+
+    void Delete(City city);
 }

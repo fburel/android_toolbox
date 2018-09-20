@@ -28,6 +28,18 @@ public class CityListFragment extends SmartListFragment<City> {
     private static final String TEXT_VIEW_FIELD = "TEXT_VIEW_FIELD";
 
     @Override
+    public void onStart() {
+        super.onStart();
+        setRightButtonItem("Add", android.R.drawable.ic_menu_add);
+        onRefresh();
+    }
+
+    @Override
+    protected void onRightButtonItemClicked() {
+        EventBus.getDefault().post(SegueEvents.AddCity);
+    }
+
+    @Override
     public int getCellLayout() {
         return android.R.layout.simple_list_item_1;
     }
