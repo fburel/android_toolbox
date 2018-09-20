@@ -1,12 +1,20 @@
 package f10.net.androidtoolboxdemo;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import f10.net.androidtoolbox.navigation.PushPopActivity;
+import f10.net.androidtoolboxdemo.Segue.SegueEvents;
 import f10.net.androidtoolboxdemo.fragments.CityListFragment;
-import f10.net.androidtoolboxdemo.fragments.RevealCellListFragment;
+import f10.net.androidtoolboxdemo.fragments.CityDetailFragments;
 
 /**
  * Created by fl0 on 25/10/2017.
@@ -15,13 +23,28 @@ import f10.net.androidtoolboxdemo.fragments.RevealCellListFragment;
 public class MainActivity extends PushPopActivity {
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
+    @Override
     protected void askForPermissionsIfNeeded() {
-        // we don't need anything here
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+                requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 0);
+        }
     }
 
     @Override
     public Class<? extends Fragment> getStartActivityClass() {
-        return RevealCellListFragment.class;
+        return CityListFragment.class;
     }
 
     @Override
@@ -33,4 +56,15 @@ public class MainActivity extends PushPopActivity {
     protected void onSideMenuItemSelected(MenuItem element) {
         // ignore
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(SegueEvents event) {
+        switch (event)
+        {
+            // When a city is selected, present the detail of said city (push animation)
+            case CitySelected:
+                push(new CityDetailFragments(), event.getBundle());
+                break;
+        }
+    };
 }

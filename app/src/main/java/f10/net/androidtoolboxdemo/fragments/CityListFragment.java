@@ -3,20 +3,27 @@ package f10.net.androidtoolboxdemo.fragments;
 import android.view.View;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.Comparator;
 import java.util.List;
 
+import f10.net.androidtoolbox.ServiceLocator;
 import f10.net.androidtoolbox.asynclib.Promise;
 import f10.net.androidtoolbox.collections.SmartList;
 import f10.net.androidtoolbox.interfaces.SortDescripor;
 import f10.net.androidtoolbox.listAdapter.SmartListFragment;
 import f10.net.androidtoolbox.listAdapter.ViewHolder;
+import f10.net.androidtoolbox.navigation.BundleBuilder;
+import f10.net.androidtoolboxdemo.IServices.ICityRepository;
+import f10.net.androidtoolboxdemo.SQLite.City;
+import f10.net.androidtoolboxdemo.Segue.SegueEvents;
 
 /**
  * Created by fl0 on 25/10/2017.
  */
 
-public class CityListFragment extends SmartListFragment<String> {
+public class CityListFragment extends SmartListFragment<City> {
 
     private static final String TEXT_VIEW_FIELD = "TEXT_VIEW_FIELD";
 
@@ -31,8 +38,8 @@ public class CityListFragment extends SmartListFragment<String> {
     }
 
     @Override
-    public void bindViewHolder(ViewHolder vh, String item) {
-        ((TextView)(vh.getView(TEXT_VIEW_FIELD))).setText(item);
+    public void bindViewHolder(ViewHolder vh, City item) {
+        ((TextView)(vh.getView(TEXT_VIEW_FIELD))).setText(item.getName());
     }
 
     @Override
@@ -41,20 +48,16 @@ public class CityListFragment extends SmartListFragment<String> {
     }
 
     @Override
-    public List<String> getElements() {
-        SmartList<String> strs = new SmartList<>(new String[]{"Rouen", "Paris", "Chicago", "Budapest", "Buccarest", "Prague", "Tokio","Pekin", "Moscow", "St Petersbourg", "Kiev", "Bratislava", "Rome", "Belgrade", "Barcelone", "Los Angeles", "San Fransisco", "Las Vegas", "Tijuana", "Lisbone", "Porto", "Venise", "Lubljana", "Sarajevo", "Bruxelles", "Liege", "Amsterdam"});
-        strs.sort(new SortDescripor<String>() {
-            @Override
-            public boolean isBefore(String item1, String item2) {
-                return item1.compareTo(item2) < 0;
-            }
-        });
-        return strs;
+    public List<City> getElements() {
+        return ServiceLocator.get(ICityRepository.class).getAllCities();
     }
 
     @Override
-    public void onSelect(String element) {
-
+    public void onSelect(City element) {
+        EventBus.getDefault().post(SegueEvents.CitySelected.addBundle(BundleBuilder
+                .withSerializable("CitySelected", element)
+                .createBundle())
+        );
     }
 
     @Override

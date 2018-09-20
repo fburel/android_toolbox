@@ -8,6 +8,11 @@ import java.util.HashMap;
 
 public class ServiceLocator {
 
+    public interface IService
+    {
+
+    }
+
     // singleton ...
 
     private static class ServiceLocatorHolder {
@@ -20,22 +25,20 @@ public class ServiceLocator {
 
     private HashMap<String, Object> services =  new HashMap<>();
 
-    public static Object get(String reference)
+    public static <T extends IService> T get(Class<? extends T> contract)
     {
+        String name = contract.getName();
 
-        if(ServiceLocatorHolder.INSTANCE.services.containsKey(reference)) {
-            return ServiceLocatorHolder.INSTANCE.services.get(reference);
+        if(ServiceLocatorHolder.INSTANCE.services.containsKey(name)) {
+            return (T) ServiceLocatorHolder.INSTANCE.services.get(name);
         }
-
         assert true;
-
         return null;
-
     }
 
-    public static void put(String reference, Object service)
+    public static <T extends IService> void put(Class<? extends T> contract,  T service)
     {
-        ServiceLocatorHolder.INSTANCE.services.put(reference, service);
+        ServiceLocatorHolder.INSTANCE.services.put(contract.getName(), service);
     }
 
 }

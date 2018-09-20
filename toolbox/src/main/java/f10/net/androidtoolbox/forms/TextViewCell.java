@@ -22,7 +22,7 @@ public class TextViewCell extends Cell<String> {
     private String _value;
     private WeakReference<EditText> _editTextRef;
 
-    private TextViewCell(int tag, FormFragment form, String hint, String text)
+    public TextViewCell(int tag, FormFragment form, String hint, String text)
     {
         super(tag, form);
         _value = text;
