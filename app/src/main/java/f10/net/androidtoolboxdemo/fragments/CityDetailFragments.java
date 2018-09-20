@@ -21,10 +21,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import f10.net.androidtoolbox.ServiceLocator;
 import f10.net.androidtoolbox.forms.Cell;
 import f10.net.androidtoolbox.forms.FormFragment;
 import f10.net.androidtoolbox.forms.PickerDialogCell;
 import f10.net.androidtoolbox.forms.TextViewCell;
+import f10.net.androidtoolboxdemo.IServices.ICityRepository;
 import f10.net.androidtoolboxdemo.R;
 import f10.net.androidtoolboxdemo.SQLite.City;
 
@@ -63,6 +65,7 @@ public class CityDetailFragments extends FormFragment {
         }
 
         // Maybe save here into persistent store
+        ServiceLocator.get(ICityRepository.class).Update(city);
     }
 
 

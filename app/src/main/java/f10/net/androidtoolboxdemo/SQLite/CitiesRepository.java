@@ -60,4 +60,9 @@ public class CitiesRepository implements ICityRepository {
         this.helper.createEntity(this.tableCity, new City(name, longitude, latitude));
     }
 
+    @Override
+    public void Update(City city) {
+        this.helper.updateEntity(this.tableCity, city);
+    }
+
 }
