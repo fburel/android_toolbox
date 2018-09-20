@@ -537,6 +537,53 @@ And if you want to for loop... then it's easy
             }
         });
 ```
+## Service Locator
+
+Want to keep just a single object of a given class alive and availble from evrywhere?
+Singleton just make you throw up?
+ACID much but DI fells like a bit overkill?
+Go ServiceLocator
+
+```java
+// An interface (must extend IService, but it's just a marker no worry)
+public interface ICityRepository extends ServiceLocator.IService
+{
+    ArrayList<City> getAllCities();
+
+    void AddCity(String name, double longitude, double latitude);
+
+    void Update(City city);
+}
+
+// A class that implement this interface, with a constructor like we dont like.
+public class CitiesRepository implements ICityRepository {
+public CitiesRepository(Context ctx) {...}
+ ...
+}
+
+// then just, once an for all in your Application class do this
+public class App extends Application {
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        CitiesRepository repo = new CitiesRepository(this);
+        ServiceLocator.put(ICityRepository.class, repo);
+    }
+}
+
+// and wherever you want do that
+public class CityListFragment extends SmartListFragment<City> {
+   
+    @Override
+    public List<City> getElements() {
+        return ServiceLocator.get(ICityRepository.class).getAllCities();
+    }
+
+   ...
+}
+
+```
 
 ## more to explore
 Explore, ask away... there are good things! Contributors welcome
