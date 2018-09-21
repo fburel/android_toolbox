@@ -1,6 +1,8 @@
 # android_toolbox
 A set of classes designed to make android app development easier. 
 
+## how to use
+Release .aar file is in the lib folder.
 
 ## Fragment based navigation
 No need to argue about creating a Fragment or an Activity anymore. Fragments are for displaying UI, Activities for navigation from one fragment to another. Have you activity override PushPop Activity and enjoy method such as Push(Fragment f), Pop(), PopToRoot(), PresentModally(Fragment f)... All the Heavy lifting is done for you.
