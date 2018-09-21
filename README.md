@@ -346,8 +346,8 @@ You got it all select, where clause, orderby, group by... Here is a sample that 
     /// Return all the city from the db, order alphabetically where long/lat are different from 0
     public ArrayList<City> getAllCities() {
 
-        SQLiteQuery.Predicate p1 = SQLiteQuery.Predicate.notEqual("longitude", 0); // longitude == 0
-        SQLiteQuery.Predicate p2 = SQLiteQuery.Predicate.notEqual("latitude", 0); // latitude == 0
+        SQLiteQuery.Predicate p1 = SQLiteQuery.Predicate.equal("longitude", 0); // longitude == 0
+        SQLiteQuery.Predicate p2 = SQLiteQuery.Predicate.equal("latitude", 0); // latitude == 0
         SQLiteQuery.Predicate p3 = SQLiteQuery.Predicate.and(p1, p2); // latitude == 0 && longitude == 0;
         SQLiteQuery.Predicate p4 = SQLiteQuery.Predicate.not(p3); // NOT (latitude == 0 && longitude == 0);
 
